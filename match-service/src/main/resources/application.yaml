@@ -1,0 +1,17 @@
+server:
+  port: 8093
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/match-service
+    username: postgres
+    password: ${DBPASS}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+football:
+  api:
+    url: ${FOOTBALL_API_URL}
+    key: ${FOOTBALL_API_KEY}

@@ -1,0 +1,12 @@
+server:
+  port: 8091
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users-service
+    username: postgres
+    password: ${DBPASS}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+     ddl-auto: update

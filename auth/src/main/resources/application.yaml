@@ -1,0 +1,12 @@
+server:
+  port: 8094
+jwt:
+  secret: ${JWT_SECRET}
+user:
+  service:
+    url: http://localhost:8091
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
