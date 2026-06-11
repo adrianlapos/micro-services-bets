@@ -39,8 +39,6 @@ build/
 
 
 .idea/
-target/
-*.iml
 
 # Maven wrapper
 .mvn/wrapper/maven-wrapper.jar
@@ -49,5 +47,5 @@ target/
 *.log
 
 # OS files
-.DS_Store
+
 Thumbs.db
