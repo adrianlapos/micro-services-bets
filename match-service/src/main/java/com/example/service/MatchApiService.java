@@ -1,5 +1,8 @@
 package com.example.service;
 
+import com.example.commons.MatchFinishedEvent;
+import com.example.commons.MatchStatus;
+import com.example.commons.Result;
 import com.example.entity.Match;
 import com.example.entity.Team;
 import com.example.models.*;
@@ -20,19 +23,24 @@ public class MatchApiService {
     private final MatchFeignClient matchFeignClient;
     private final MatchRepository matchRepository;
     private final TeamRepository teamRepository;
-
+    private final MatchEvaluationService matchEvaluationService;
+    private final MatchEventProducer matchEventProducer;
     public MatchApiService(
             MatchFeignClient matchFeignClient,
             MatchRepository matchRepository,
-            TeamRepository teamRepository
+            TeamRepository teamRepository,
+            MatchEvaluationService matchEvaluationService,
+            MatchEventProducer matchEventProducer
     ) {
         this.matchFeignClient = matchFeignClient;
         this.matchRepository = matchRepository;
         this.teamRepository = teamRepository;
+        this.matchEvaluationService = matchEvaluationService;
+        this.matchEventProducer = matchEventProducer;
     }
 
     @Transactional
-    //@Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRate = 1800000)
     public void fetchMatches() {
         FootballResponse footballResponse = matchFeignClient.fixtures(LocalDate.now().toString());
         System.out.println("Response for fixtures: " + footballResponse);
@@ -96,15 +104,16 @@ public class MatchApiService {
             match.setStatus(status);
 
 
-            if (match.getHomeGoals() == 0) {
-                match.setHomeGoals(homeGoals);
-            }
-
-            if ( match.getAwayGoals() == 0) {
-                match.setAwayGoals(awayGoals);
-            }
-
+            match.setHomeGoals(homeGoals);
+            match.setAwayGoals(awayGoals);
             matchRepository.save(match);
+
+            if (status == MatchStatus.FINISHED) {
+                Result result = matchEvaluationService.evaluateMatch(match);
+                if (result != null){
+                matchEventProducer.sendMatchFinished(new MatchFinishedEvent(match.getId(), match.getExternalApiId(),result,match.getHomeGoals(),match.getAwayGoals()));
+                }
+            }
         }
         if (oddsResponse == null || oddsResponse.oddsFixtureResponses() == null) {
             return;

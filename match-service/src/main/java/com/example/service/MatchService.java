@@ -1,13 +1,11 @@
 package com.example.service;
 
 import com.example.commons.MatchDTO;
+import com.example.commons.MatchStatus;
 import com.example.commons.TeamDTO;
 import com.example.entity.Match;
 import com.example.entity.Team;
-import com.example.models.CreateMatchRequest;
-import com.example.models.MatchMapper;
-import com.example.models.TeamCreationRequest;
-import com.example.models.TeamMapper;
+import com.example.models.*;
 import com.example.repository.MatchRepository;
 import com.example.repository.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -75,6 +73,9 @@ public class MatchService {
 
     public List<MatchDTO> getAllMatchesBetween(LocalDateTime timeBefore,LocalDateTime timeAfter){
         return matchRepository.findMatchesBetween(timeBefore,timeAfter).stream().map(MatchMapper::maptoDTO).toList();
+    }
+    public MatchStatus getMatchStatus(Long matchId){
+        return matchRepository.findById(matchId).map(Match::getStatus).orElse(null);
     }
 
 

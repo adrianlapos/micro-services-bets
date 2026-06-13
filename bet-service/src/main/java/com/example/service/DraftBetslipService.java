@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.models.DraftBetslip;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +10,9 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class DraftBetslipService {
     private final RedisTemplate<String,Object> redisTemplate;
-
-    public DraftBetslipService(RedisTemplate<String,Object> redisTemplate){
+    public DraftBetslipService(RedisTemplate<String,Object> redisTemplate,MatchStatusFeignClient matchStatusFeignClient){
         this.redisTemplate = redisTemplate;
+
     }
 
     public void saveDraft(Long userId,DraftBetslip draftBetslip){

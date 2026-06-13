@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 import org.apache.logging.log4j.util.Lazy;
 
 @Entity
-@Table(name = "bet")
+@Table(name = "bet",
+uniqueConstraints = {@UniqueConstraint(columnNames = {"bet_betslip_id","match_id"})})
 public class Bet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -50,5 +51,21 @@ public class Bet {
 
     public void setBetslip(Betslip betslip) {
         this.betslip = betslip;
+    }
+
+    public void setMatchId(Long matchId) {
+        this.matchId = matchId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setGuess(Guess guess) {
+        this.guess = guess;
+    }
+
+    public void setBetStatus(BetStatus betStatus) {
+        this.betStatus = betStatus;
     }
 }

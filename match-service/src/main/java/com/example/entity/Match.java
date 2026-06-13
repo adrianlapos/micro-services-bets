@@ -1,8 +1,7 @@
 package com.example.entity;
 
 import com.example.commons.Result;
-import com.example.models.MatchStatus;
-import com.example.models.Status;
+import com.example.commons.MatchStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -29,6 +28,7 @@ public class Match {
     @Enumerated(EnumType.STRING)
     private MatchStatus status;
     private LocalDateTime time;
+    @Column(unique = true)
     private Long externalApiId;
     public Match() {
     }
